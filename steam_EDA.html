@@ -359,8 +359,45 @@ display: none;
 
 <p>This is the .rmd file for the project. Exploring the Steam data
 set.</p>
-<pre class="r"><code>#march_c &lt;- read.csv(&quot;games_march2025_cleaned.csv&quot;)
-march_c &lt;- read.csv(&quot;C:/Users/Hannah Work/OneDrive/H_Laptop/Documents/games_march2025_cleaned.csv&quot;)
+<pre class="r"><code>#install.packages(&quot;tidyverse&quot;)
+#install.packages(&quot;ggplot2&quot;)
+#install.packages(&quot;dplyr&quot;)
+#install.packages(&quot;data.table&quot;)
+#install.packages(&quot;pander&quot;)
+
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.2.0     ✔ readr     2.2.0
+## ✔ forcats   1.0.1     ✔ stringr   1.6.0
+## ✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+## ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+## ✔ purrr     1.2.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(dplyr)
+library(data.table)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;data.table&#39;
+## 
+## The following objects are masked from &#39;package:lubridate&#39;:
+## 
+##     hour, isoweek, isoyear, mday, minute, month, quarter, second, wday,
+##     week, yday, year
+## 
+## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     between, first, last
+## 
+## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     transpose</code></pre>
+<pre class="r"><code>library(pander)
+
+march_c &lt;- read.csv(&quot;games_march2025_cleaned.csv&quot;)
+#march_c &lt;- read.csv(&quot;C:/Users/Hannah Work/OneDrive/H_Laptop/Documents/games_march2025_cleaned.csv&quot;)
 
 summary(march_c)</code></pre>
 <pre><code>##      appid             name           release_date        required_age    
@@ -467,6 +504,51 @@ summary(march_c)</code></pre>
 ##  3rd Qu.:   -1.00  
 ##  Max.   :96473.00  
 ## </code></pre>
+<p><br />
+</p>
+<div id="variables-i-want-to-include" class="section level3">
+<h3>Variables I want to include:</h3>
+<ul>
+<li>appid</li>
+<li>name</li>
+<li>release_date</li>
+<li>required_age</li>
+<li>price</li>
+<li>dlc count</li>
+<li>about_the_game<br />
+</li>
+</ul>
+<p><em>Note: I decided to keep about the game instead of the detailed
+and short descriptions.</em><br />
+</p>
+<ul>
+<li>header_image</li>
+<li>windows</li>
+<li>mac</li>
+<li>linux</li>
+<li>metacritic_score</li>
+<li>achievements</li>
+<li>recommendations</li>
+<li>supported_languages</li>
+<li>developers</li>
+<li>publishers</li>
+<li>categories</li>
+<li>genres</li>
+<li>user_score</li>
+<li>positive</li>
+<li>negative</li>
+<li>estimated_owners</li>
+<li>average_playtime_forever</li>
+<li>average_playtime_2weeks</li>
+<li>median_playtime_forever</li>
+<li>median_playtime_2weeks</li>
+<li>discount</li>
+<li>peak_ccu</li>
+<li>tags<br />
+</li>
+</ul>
+<p><em>What do these mean: pct_pos_total, pct_pos_recent</em></p>
+</div>
 
 
 

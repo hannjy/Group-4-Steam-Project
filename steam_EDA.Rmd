@@ -11,9 +11,64 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This is the .rmd file for the project. Exploring the Steam data set. 
 
-```{r}
-#march_c <- read.csv("games_march2025_cleaned.csv")
-march_c <- read.csv("C:/Users/Hannah Work/OneDrive/H_Laptop/Documents/games_march2025_cleaned.csv")
+```{r, error = FALSE, warning=FALSE}
+#install.packages("tidyverse")
+#install.packages("ggplot2")
+#install.packages("dplyr")
+#install.packages("data.table")
+#install.packages("pander")
+
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(data.table)
+library(pander)
+
+march_c <- read.csv("games_march2025_cleaned.csv")
+#march_c <- read.csv("C:/Users/Hannah Work/OneDrive/H_Laptop/Documents/games_march2025_cleaned.csv")
 
 summary(march_c)
 ```
+\
+
+### Variables I want to include:
+
+* appid
+* name
+* release_date
+* required_age
+* price
+* dlc count
+* about_the_game
+\
+
+*Note: I decided to keep about the game instead of the detailed and short descriptions.*
+\
+
+* header_image
+* windows
+* mac
+* linux
+* metacritic_score
+* achievements
+* recommendations
+* supported_languages
+* developers
+* publishers
+* categories
+* genres
+* user_score
+* positive
+* negative
+* estimated_owners
+* average_playtime_forever
+* average_playtime_2weeks
+* median_playtime_forever
+* median_playtime_2weeks
+* discount
+* peak_ccu
+* tags
+\
+
+*What do these mean: pct_pos_total, pct_pos_recent*
+

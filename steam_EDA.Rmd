@@ -1,0 +1,19 @@
+---
+title: "Steam_test"
+author: "Hannah Young"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is the .rmd file for the project. Exploring the Steam data set. 
+
+```{r}
+#march_c <- read.csv("games_march2025_cleaned.csv")
+march_c <- read.csv("C:/Users/Hannah Work/OneDrive/H_Laptop/Documents/games_march2025_cleaned.csv")
+
+summary(march_c)
+```

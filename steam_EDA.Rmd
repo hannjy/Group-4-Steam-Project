@@ -71,4 +71,14 @@ summary(march_c)
 \
 
 *What do these mean: pct_pos_total, pct_pos_recent*
+\
 
+```{r}
+nrow(march_c)
+ncol(march_c)
+
+
+```
+\
+
+![](C:/Users/Hannah Work/Downloads/cat.avif)

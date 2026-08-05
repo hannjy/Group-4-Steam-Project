@@ -15,15 +15,15 @@ This is the .rmd file for the project. Exploring the Steam data set.
 
 #### **Project title, names and IDs of students in your project group, date of submission**
 
-• State which dataset(s) your group worked on, and their source
+• State which dataset(s) your group worked on, and their source **HANNAH**
 
-• Explain briefly why the dataset is of interest, or what questions it could be used to answer; assume that the reader has never heard of your dataset
+• Explain briefly why the dataset is of interest, or what questions it could be used to answer; assume that the reader has never heard of your dataset **HANNAH & COMBINED GROUP QUESTION**
 
-• State the types of data in the dataset(s) and the structure of the dataset(s). Are the data numerical, categorical, or both? Time series? Coordinates? Diagnostic categories? This does NOT need to be an exhaustive list of every variable, just a few comments on the overall types.
+• State the types of data in the dataset(s) and the structure of the dataset(s). Are the data numerical, categorical, or both? Time series? Coordinates? Diagnostic categories? This does NOT need to be an exhaustive list of every variable, just a few comments on the overall types. **SAMUEL**
 
-• State how complete the dataset(s) are (i.e. how many missing, any structure to the missing data, whether there are errors in the data)
+• State how complete the dataset(s) are (i.e. how many missing, any structure to the missing data, whether there are errors in the data) **SAMUEL**
 
-• If you used more than one dataset, state what steps you had to take to integrate the datasets
+• If you used more than one dataset, state what steps you had to take to integrate the datasets **HANNAH**
 
 
 ---
@@ -54,7 +54,7 @@ This is the .rmd file for the project. Exploring the Steam data set.
 
 ### **Ethics, Privacy and Security**
 
-• Brief discussion of any ethical considerations that apply to your project
+• Brief discussion of any ethical considerations that apply to your project 
 
 • Brief discussion of any privacy concerns that might arise connected to your project
 

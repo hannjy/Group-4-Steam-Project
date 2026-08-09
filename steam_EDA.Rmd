@@ -15,16 +15,26 @@ This is the .rmd file for the project. Exploring the Steam data set.
 
 #### **Project title, names and IDs of students in your project group, date of submission**
 
-• State which dataset(s) your group worked on, and their source **HANNAH**
+• *State which dataset(s) your group worked on, and their source* **HANNAH**
+\
+<br>
+We worked on the Steam Games Dataset 2025, and chose the games_march2025_cleaned subset to work on. This was sourced from Kaggle, where the data was created with Steam store page scraping and Steam Games Scraper repository, which gathers data using the Steam API and Steam Spy.
 
-• Explain briefly why the dataset is of interest, or what questions it could be used to answer; assume that the reader has never heard of your dataset **HANNAH & COMBINED GROUP QUESTION**
+<br>
+• *Explain briefly why the dataset is of interest, or what questions it could be used to answer; assume that the reader has never heard of your dataset* **HANNAH & COMBINED GROUP QUESTION**
+\
+<br>
+This dataset provides extensive information about individual games that are available on the digital gaming distribution platform Steam. It was of interest for us because we thought that the game data could help to build informative analysis that tells a story and shows insightful correlations. We are able to conduct both broad and specific analysis which gives us alot of material to work with for answering specific questions. 
 
-• State the types of data in the dataset(s) and the structure of the dataset(s). Are the data numerical, categorical, or both? Time series? Coordinates? Diagnostic categories? This does NOT need to be an exhaustive list of every variable, just a few comments on the overall types. **SAMUEL**
+<br>
+• *State the types of data in the dataset(s) and the structure of the dataset(s). Are the data numerical, categorical, or both? Time series? Coordinates? Diagnostic categories? This does NOT need to be an exhaustive list of every variable, just a few comments on the overall types.* **SAMUEL**
 
-• State how complete the dataset(s) are (i.e. how many missing, any structure to the missing data, whether there are errors in the data) **SAMUEL**
+• *State how complete the dataset(s) are (i.e. how many missing, any structure to the missing data, whether there are errors in the data)* **SAMUEL**
 
-• If you used more than one dataset, state what steps you had to take to integrate the datasets **HANNAH**
-
+• *If you used more than one dataset, state what steps you had to take to integrate the datasets* **HANNAH**
+\
+<br>
+We only used the games_march2025_cleaned subset of the Steam Games Dataset 2025.
 
 ---
 

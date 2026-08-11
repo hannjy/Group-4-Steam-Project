@@ -29,7 +29,11 @@ This dataset provides extensive information about individual games that are avai
 <br>
 • *State the types of data in the dataset(s) and the structure of the dataset(s). Are the data numerical, categorical, or both? Time series? Coordinates? Diagnostic categories? This does NOT need to be an exhaustive list of every variable, just a few comments on the overall types.* **SAMUEL**
 
+The dataset consists of 89,618 rows, one per Steam application identified by `appid`, and is cross-sectional as each game is observed once at the March 2025 collection date. The variables are mixed: continuous and discrete numerical measures such as `price`, `pct_pos_total` and count variables like `dlc_count` and `peak_ccu`; binary (`windows`, `mac`, `linux`); ordinal bins (`estimated_owners`); nominal fields stored as lists (`publishers`, `genres`, `categories`, `supported_languages`); and unstructured text.
+
 • *State how complete the dataset(s) are (i.e. how many missing, any structure to the missing data, whether there are errors in the data)* **SAMUEL**
+
+Explicit missingness is minimal, under 1% for every retained variable, the largest being `categories` at 0.9775% empty and `publishers` at 0.6104%. However, missingness is instead encoded through sentinel values which will be treated during EDA.
 
 • *If you used more than one dataset, state what steps you had to take to integrate the datasets* **HANNAH**
 \

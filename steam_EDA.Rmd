@@ -69,10 +69,23 @@ We only used the games_march2025_cleaned subset of the Steam Games Dataset 2025.
 ### **Ethics, Privacy and Security**
 
 • Brief discussion of any ethical considerations that apply to your project 
+\
+<br>
+
+ethical concerns:
+  perpetuating negative stereotypes
+  making incorrect claims about games -> damage the brand
+  
+An ethical concern is that users of steam cannot consent to having their data used?
 
 • Brief discussion of any privacy concerns that might arise connected to your project
+\
+<br>
+
+A privacy concern of the project is that some variables could be used to identify individuals, such as the device played on. However, the data set does not include any variables that link the games to steam accounts. This means that you cannot trace the data back to certain individuals.  
 
 • Brief discussion of what steps you could take to keep your project data and results secure (you do NOT need to carry this out, you just need to talk about it in the report). Make it clear what steps you actually did take vs. any you would take if given additional time and resources. 
+
 
 ---
 

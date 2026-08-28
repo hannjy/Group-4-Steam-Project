@@ -33,3 +33,25 @@ p <- ggplot(filtered_df, aes(x=price)) +
   scale_x_continuous(breaks = seq(199.99, 999.98, 100))+
   geom_histogram()
 p
+
+sapply(small_march_c, function(x) sum(is.na(x)))
+
+colSums(is.na(small_march_c))
+
+numeric_steam <- small_march_c[, sapply(small_march_c, is.numeric)]
+summary(numeric_steam)
+
+#install.packages("corrplot")
+library(corrplot)
+
+m <- cor(numeric_steam)
+
+corrplot(m, method = "number")
+
+#WARNING: this plot takes like 5 minutes to generate...
+
+#pairs(numeric_steam[, 1:7], panel = function(x,y){
+#  points(x,y)
+#  abline(lm(y~x), col="red")})
+
+nrow(numeric_steam)

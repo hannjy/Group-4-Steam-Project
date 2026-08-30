@@ -160,6 +160,8 @@ missing_df <- data.frame(
 )
 
 pander(missing_df)
+
+unique(df2$estimated_owners)
 ```
 
 --- 

@@ -132,6 +132,36 @@ nrow(march_c)
 ncol(march_c)
 ```
 
+```{r}
+keep_col <- c(
+  "name","release_date","price","dlc_count","about_the_game","short_description","windows","mac","linux","achievements",
+                           "supported_languages","publishers","categories","genres","estimated_owners",
+                           "average_playtime_forever","peak_ccu","num_reviews_total","pct_pos_total"
+)
+
+df2 <- march_c %>%
+  select(any_of(keep_col))
+
+missing_df <- data.frame(
+  variable = c("supported_languages", "publishers", "categories", "genres",
+               "estimated_owners", "average_playtime_forever", "peak_ccu", "num_reviews_total",
+               "pct_pos_total"),
+  pct_missing = c(
+    mean(df2$supported_languages == "[]"),
+    mean(df2$publishers == "[]"),
+    mean(df2$categories == "[]"),
+    mean(df2$genres == "[]"),
+    mean(df2$estimated_owners == "0 - 0"),
+    mean(df2$average_playtime_forever == 0),
+    mean(df2$peak_ccu == 0),
+    mean(df2$num_reviews_total < 0),
+    mean(df2$pct_pos_total < 0)
+  ) * 100
+)
+
+pander(missing_df)
+```
+
 --- 
 
 ### **Individual Contributions**

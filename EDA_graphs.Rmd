@@ -3,3 +3,58 @@ title: "EDA_graphs"
 output: html_document
 ---
 
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is the page for EDA and graphs. 
+
+* Several summary tables and/or plots, each describing one, two or three variables in the data that you thought were interesting
+
+* Explain the definitions of the variables in each table/plot
+
+* Comment on the main features of each plot
+
+* Include suitable labels and keys for each plot
+
+* Make sure all plots would be readable if printed in black & white, and adjust the point sizes and/or line thicknesses to improve readability
+
+* Lay out all tables so that they are clearly readable and clearly labelled, and do not use excessive significant figures
+
+* All figures and tables should be numbered and should have captions
+
+
+```{r, echo=FALSE, message = FALSE}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(data.table)
+library(pander)
+library(corrplot)
+
+march_c <- read.csv("games_march2025_cleaned.csv")
+small_steam <- march_c[c("name","price","dlc_count","about_the_game","short_description","windows","mac","linux",
+                         "achievements","supported_languages","publishers","categories","genres",
+                         "estimated_owners","average_playtime_forever","peak_ccu","num_reviews_total","pct_pos_total")]
+```
+\
+
+#### Correlation matrix:
+
+```{r, echo=FALSE}
+library(corrplot)
+
+numeric_steam <- small_steam[, sapply(small_steam, is.numeric)]
+#summary(numeric_steam)
+
+m <- cor(numeric_steam)
+#corrplot(m, method = "number")
+```
+```{r, fig.show="hold", out.width="70%", echo=FALSE}
+corrplot(m, method = "number")
+
+pairs(numeric_steam[, 1:7], panel = function(x,y){
+  points(x,y)
+  abline(lm(y~x), col="red")})
+```
+

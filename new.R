@@ -5,11 +5,12 @@ x
 
 getwd()
 
-small_march_c <- march_c[c("name", "price","dlc_count","about_the_game","short_description","windows","mac","linux","achievements",
+small_steam <- march_c[c("name", "price","dlc_count","about_the_game","short_description","windows","mac","linux","achievements",
                            "supported_languages","developers","publishers","categories","genres","estimated_owners",
                            "average_playtime_forever","peak_ccu","num_reviews_total","pct_pos_total")]
 
-summary(small_march_c)
+summary(small_steam)
+ncol(small_steam)
 
 hist(small_march_c$price)
 
@@ -36,7 +37,7 @@ p
 
 sapply(small_march_c, function(x) sum(is.na(x)))
 
-colSums(is.na(small_march_c))
+colSums(is.na(small_steam))
 
 numeric_steam <- small_march_c[, sapply(small_march_c, is.numeric)]
 summary(numeric_steam)

@@ -50,7 +50,7 @@ numeric_steam <- small_steam[, sapply(small_steam, is.numeric)]
 m <- cor(numeric_steam)
 #corrplot(m, method = "number")
 ```
-```{r, fig.show="hold", out.width="70%", echo=FALSE}
+```{r, fig.show="hold", out.width="60%", echo=FALSE}
 corrplot(m, method = "number")
 
 pairs(numeric_steam[, 1:7], panel = function(x,y){
@@ -58,3 +58,13 @@ pairs(numeric_steam[, 1:7], panel = function(x,y){
   abline(lm(y~x), col="red")})
 ```
 
+```{r}
+filtered_price_large <- small_steam %>% filter(price > 199.99)
+filtered_price_large[,c("name","price")]
+
+filtered_price_small <- small_steam %>% filter(price < 199.99)
+filtered_price_small[,c("name","price")]
+
+hist(filtered_price_small$price, breaks = 30)
+hist(filtered_price_large$price, breaks = 30)
+```

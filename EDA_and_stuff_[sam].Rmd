@@ -1,0 +1,42 @@
+---
+title: "EDA_and_stuff_[sam]"
+output: html_document
+---
+
+```{r, message=FALSE, echo=FALSE}
+library(dplyr)
+library(pander)
+library(ggplot2)
+
+df <- read.csv("games_march2025_cleaned.csv")
+keep_col <- c(
+  "name","release_date","price","dlc_count","about_the_game","short_description","windows","mac","linux",
+  "achievements", "supported_languages","publishers","categories","genres","estimated_owners",
+  "average_playtime_forever","peak_ccu","num_reviews_total","pct_pos_total"
+)
+
+df2 <- df %>%
+  select(any_of(keep_col))
+
+summary(df2)
+```
+
+```{r}
+df2 <- df2 %>%
+  mutate(
+    release_date = as.Date(release_date, format='%Y-%m-%d'),
+    release_year = as.integer(format(release_date, "%Y"))
+  )
+
+df2 %>%
+  count(release_year) %>%
+  ggplot(aes(x = release_year, y = n)) +
+  geom_col() +
+  labs(title = "Steam releases per year",
+       x = "Release year", y = "Number of games")
+```
+
+```{r}
+
+```
+

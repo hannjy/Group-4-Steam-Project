@@ -2,12 +2,14 @@
 title: "EDA_and_stuff_[sam]"
 output: html_document
 ---
-
 ```{r, message=FALSE, echo=FALSE}
 library(dplyr)
 library(pander)
 library(ggplot2)
+library(tidyr)
+```
 
+```{r, message=FALSE, echo=FALSE}
 df <- read.csv("games_march2025_cleaned.csv")
 keep_col <- c(
   "name","release_date","price","dlc_count","about_the_game","short_description","windows","mac","linux",
@@ -17,11 +19,9 @@ keep_col <- c(
 
 df2 <- df %>%
   select(any_of(keep_col))
-
-summary(df2)
 ```
 
-```{r}
+```{r, echo=FALSE}
 df2 <- df2 %>%
   mutate(
     release_date = as.Date(release_date, format='%Y-%m-%d'),
@@ -36,7 +36,83 @@ df2 %>%
        x = "Release year", y = "Number of games")
 ```
 
-```{r}
+```{r, message=FALSE, echo=FALSE}
+missing_df <- data.frame(
+  variable = c("supported_languages", "publishers", "categories", "genres",
+               "estimated_owners", "average_playtime_forever", "peak_ccu", "num_reviews_total",
+               "pct_pos_total"),
+  pct_missing = c(
+    mean(df2$supported_languages == "[]"),
+    mean(df2$publishers == "[]"),
+    mean(df2$categories == "[]"),
+    mean(df2$genres == "[]"),
+    mean(df2$estimated_owners == "0 - 0"),
+    mean(df2$average_playtime_forever == 0),
+    mean(df2$peak_ccu == 0),
+    mean(df2$num_reviews_total < 0),
+    mean(df2$pct_pos_total < 0)
+  ) * 100
+)
 
+pander(missing_df)
+```
+
+```{r, message=FALSE, echo=FALSE}
+df2 <- df2 %>%
+  mutate(
+    languages_clean = gsub("\\[|\\]|'", "", supported_languages),
+    languages_list  = strsplit(languages_clean, ",\\s*"),
+    n_languages     = lengths(languages_list)
+  )
+
+df2 <- df2 %>%
+  mutate(
+    windows = as.logical(windows),
+    mac = as.logical(mac),
+    linux = as.logical(linux),
+    n_platforms = windows + mac + linux
+  )
+```
+
+```{r, message=FALSE, echo=FALSE}
+platform_by_year <- df2 %>%
+  filter(release_year >= 2005) %>%
+  group_by(release_year) %>%
+  summarise(
+    windows = mean(windows) * 100,
+    mac     = mean(mac) * 100,
+    linux   = mean(linux) * 100
+  ) %>%
+  pivot_longer(cols = c(windows, mac, linux),
+               names_to = "platform", values_to = "pct")
+
+ggplot(platform_by_year, aes(x = release_year, y = pct,
+                              color = platform, linetype = platform)) +
+  geom_line(linewidth = 1) +
+  labs(title = "platform availability by release year",
+       x = "release_year", y = "% of games released that year",
+       color = "platform", linetype = "platform") +
+  theme_minimal()
+```
+
+```{r}
+df3 <- as.data.frame(table(df2$estimated_owners))
+
+owner_levels <- c(
+  "0 - 0", "0 - 20000", "20000 - 50000", "50000 - 100000",
+  "100000 - 200000", "200000 - 500000", "500000 - 1000000",
+  "1000000 - 2000000", "2000000 - 5000000", "5000000 - 10000000",
+  "10000000 - 20000000", "20000000 - 50000000", "50000000 - 100000000",
+  "100000000 - 200000000", "200000000 - 500000000"
+)
+
+df3 <- df3 %>%
+  mutate(Var1 = factor(Var1,
+                       levels = owner_levels,
+                       ordered = TRUE))
+
+ggplot(df3, aes(x=Var1, y=Freq))+
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 

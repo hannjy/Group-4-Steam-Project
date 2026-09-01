@@ -24,7 +24,7 @@ df2 <- df %>%
 ```{r, echo=FALSE}
 df2 <- df2 %>%
   mutate(
-    release_date = as.Date(release_date, format='%Y-%m-%d'),
+    release_date = as.Date(release_date, format="%Y-%m-%d"),
     release_year = as.integer(format(release_date, "%Y"))
   )
 
@@ -35,6 +35,8 @@ df2 %>%
   labs(title = "Steam releases per year",
        x = "Release year", y = "Number of games")
 ```
+
+The number of games released on Steam has followed an increasing trend, which is aligned with the migration away from console gaming towards PC. Note that the data for 2025 is low because it was collected in March 2025 and therefore do not capture the full year.
 
 ```{r, message=FALSE, echo=FALSE}
 missing_df <- data.frame(
@@ -56,6 +58,7 @@ missing_df <- data.frame(
 
 pander(missing_df)
 ```
+The table above shows the percentage of variables that are missing. This is most likely due to the way data is collected. They seemed to have used sentinel figures as opposed to NA, e.g. negative or zero values.
 
 ```{r, message=FALSE, echo=FALSE}
 df2 <- df2 %>%
@@ -94,10 +97,9 @@ ggplot(platform_by_year, aes(x = release_year, y = pct,
        color = "platform", linetype = "platform") +
   theme_minimal()
 ```
+The above graph shows the percentage of games' supported platforms released each year. The period prior to 2005 was excluded due to small amount of data that skews the percentage. We can see that almost all games are always available on windows, while linux and mac support have been slowly declining after its peak in 2013.
 
-```{r}
-df3 <- as.data.frame(table(df2$estimated_owners))
-
+```{r echo=FALSE}
 owner_levels <- c(
   "0 - 0", "0 - 20000", "20000 - 50000", "50000 - 100000",
   "100000 - 200000", "200000 - 500000", "500000 - 1000000",
@@ -106,13 +108,30 @@ owner_levels <- c(
   "100000000 - 200000000", "200000000 - 500000000"
 )
 
-df3 <- df3 %>%
-  mutate(Var1 = factor(Var1,
+df3 <- df2 %>%
+  count(estimated_owners, name = "Freq") %>%
+  mutate(estimated_owners = factor(estimated_owners,
                        levels = owner_levels,
-                       ordered = TRUE))
+                       ordered = TRUE)) %>%
+  arrange(estimated_owners)
 
-ggplot(df3, aes(x=Var1, y=Freq))+
+df3
+
+ggplot(df3, aes(x=estimated_owners, y=Freq))+
   geom_col() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r echo=FALSE}
+name_estimated_owners <- c('name','estimated_owners')
+df2[df2$estimated_owners=="100000000 - 200000000", name_estimated_owners]
+df2[df2$estimated_owners=="200000000 - 500000000", name_estimated_owners]
+```
+
+From the above plot and table, we can see that the estimated_owners distribution is extremely skewed to the right, with only two games holding the highest two values. Games on average are owned by 0-20,000 people.
+
+```{r}
+peak_ccu <- df2$peak_ccu[df2$peak_ccu>0]
+sum(peak_ccu < 1000)/length(peak_ccu)
 ```
 

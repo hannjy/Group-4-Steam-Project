@@ -31,6 +31,8 @@ library(dplyr)
 library(data.table)
 library(pander)
 library(corrplot)
+library(pander)
+
 
 march_c <- read.csv("games_march2025_cleaned.csv")
 small_steam <- march_c[c("name","price","dlc_count","about_the_game","short_description","windows","mac","linux",
@@ -39,7 +41,7 @@ small_steam <- march_c[c("name","price","dlc_count","about_the_game","short_desc
 ```
 \
 
-## Correlation matrix:
+## Correlation matrix for our selected variables:
 
 ```{r, echo=FALSE}
 library(corrplot)
@@ -59,7 +61,14 @@ pairs(numeric_steam[, 1:7], panel = function(x,y){
   abline(lm(y~x), col="red")})
 ```
 
-### Summary plot for **Price**
+\
+
+There is only one strong correlation between variables num_reviews_total and peak_ccu. Num_reviews_total is the total number of reviews that the game has received. This consists of both positive and negative reviews. Peak_ccu is the games current highest peak concurrent player record. This is the greatest number of players playing the specific game at the same time. 
+
+These two games have a strong, positive correlation of 0.84; as one variable increases, the other variable increases. This is visualised by the abline in the correlation matrix, which has a strong diagnonal path to the right. 
+
+
+### Taking a look at Pirce variable 
 
 ```{r,fig.show="hold", out.width="50%", echo=FALSE}
 
@@ -75,4 +84,22 @@ hist(filtered_price_small$price, breaks = 30,
 hist(filtered_price_large$price, breaks = 30,
      main = "Distribution of games that cost over $199.99",
      xlab = "Price of game in USD")
+
+#ggplot(filtered_price_small, aes(x=price)) + 
+#  geom_histogram(binwidth = 10) +
+#  scale_x_continuous(breaks = seq(0, 199.99, by = 50))
+
+#ggplot(filtered_price_large, aes(x=price)) +
+#  geom_histogram(binwidth = 10) +
+#  scale_x_continuous(breaks = seq(200, 1000, by = 50))
+
+```
+\
+
+The variable price, denotes the base amount in USD that the game is priced at on Steam without any sales/discounts. The price variable shows a significant skew to the right where majority of the data points fall between 0-50. There are very few games that are priced above 199.99 USD, with there being three outliers that are all priced at 999.00 and 1000.00 USD. 
+\
+
+```{r, echo = FALSE}
+filtered_price_large <- arrange(filtered_price_large, price)
+pander(filtered_price_large[,c("name","price")])
 ```

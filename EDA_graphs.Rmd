@@ -65,10 +65,10 @@ pairs(numeric_steam[, 1:7], panel = function(x,y){
 
 There is only one strong correlation between variables num_reviews_total and peak_ccu. Num_reviews_total is the total number of reviews that the game has received. This consists of both positive and negative reviews. Peak_ccu is the games current highest peak concurrent player record. This is the greatest number of players playing the specific game at the same time. 
 
-These two games have a strong, positive correlation of 0.84; as one variable increases, the other variable increases. This is visualised by the abline in the correlation matrix, which has a strong diagnonal path to the right. 
+These two games have a strong, positive correlation of 0.84; as one variable increases, the other variable increases. This is visualized by the abline in the correlation matrix, which has a strong diagonal path to the right. 
 
 
-### Taking a look at Pirce variable 
+### Taking a look at Price variable 
 
 ```{r,fig.show="hold", out.width="50%", echo=FALSE}
 

@@ -60,6 +60,43 @@ pairs(numeric_steam[, 1:7], panel = function(x,y){
   points(x,y)
   abline(lm(y~x), col="red")})
 ```
+```{r}
+#install.packages("GGally")
+library(GGally)
+
+ggpairs(
+  numeric_steam,
+  mapping = NULL,
+  columns = 1:ncol(numeric_steam),
+  title = NULL,
+  upper = list(continuous = "cor", 
+               combo = "box_no_facet", 
+               discrete = "count", 
+               na = "na"),
+  lower = list(continuous = "points", 
+               combo = "facethist", 
+               discrete = "facetbar", 
+               na = "na"),
+  diag = list(continuous = "densityDiag", 
+              discrete = "barDiag", 
+              na = "naDiag"),
+  
+  #params = deprecated(),
+  xlab = NULL,
+  ylab = NULL,
+  
+  axisLabels = c("show", "internal", "none"),
+  columnLabels = colnames(numeric_steam),
+  labeller = "label_value",
+  switch = NULL,
+  showStrips = NULL,
+  legend = NULL,
+  cardinality_threshold = 15,
+  progress = NULL,
+  proportions = NULL,
+  #legends = deprecated()
+)
+```
 
 \
 

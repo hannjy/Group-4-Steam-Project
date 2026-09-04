@@ -1,0 +1,104 @@
+---
+title: "Price_EDA_H"
+output: html_document
+---
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(data.table)
+library(pander)
+library(corrplot)
+library(pander)
+library(corrplot)
+library(GGally)
+
+
+march_c <- read.csv("games_march2025_cleaned.csv")
+small_steam <- march_c[c("name","price","dlc_count","about_the_game","short_description","windows","mac","linux",
+                         "achievements","supported_languages","publishers","categories","genres",
+                         "estimated_owners","average_playtime_forever","peak_ccu","num_reviews_total","pct_pos_total")]
+
+numeric_steam <- small_steam[, sapply(small_steam, is.numeric)]
+```
+
+Correlation matrix for all the variables
+\
+  
+```{r, echo =FALSE}
+corrplot(
+  cor(numeric_steam), 
+  method = "number",
+  tl.cex = 0.6)
+title("Correlation Matrix for Numeric Variables in Steam dataset", line = 4)
+```
+
+Taking a look at the price variable
+
+```{r, echo = FALSE}
+ggplot(small_steam, aes(x = price)) +
+  geom_density(fill = "lightblue") +
+  labs(
+    title = "Density Plot of Price",
+    x = "Price in USD",
+    y = "Density"
+  )
+
+```
+\
+
+Why is it so long?... Lets take a look:
+\
+
+```{r, echo = FALSE, fig.show="hold", out.width="50%"}
+filtered_price_large <- small_steam %>% filter(price > 199.99)
+#filtered_price_large[,c("name","price")]
+
+filtered_price_small <- small_steam %>% filter(price < 199.99)
+#filtered_price_small[,c("name","price")]
+
+ggplot(filtered_price_small, aes(x = price)) +
+  geom_histogram(binwidth = 5, fill = "darkslategrey", color = "white") +
+  labs(
+    title = "Distribution of Price under $199.99",
+    x = "Price in USD",
+    y = "Count"
+  )
+
+ggplot(filtered_price_large, aes(x = price)) +
+  geom_histogram(binwidth = 20, fill = "darkslategrey", color = "white") +
+  labs(
+    title = "Distribution of Price over $199.99",
+    x = "Price in USD",
+    y = "Count"
+  )
+```
+\
+The distribution looks so off, because there are only a handful of games that are priced above $199.99. 
+\
+
+```{r, echo = FALSE}
+filtered_price_large <- arrange(filtered_price_large, price)
+pander(filtered_price_large[,c("name","price")])
+```
+There are 
+
+```{r}
+ggplot(small_steam, aes(y = price)) +
+  geom_boxplot(fill = "orange") +
+  labs(
+    title = "Boxplot of Price",
+    y = "Price in USD"
+  )
+
+ggplot(small_steam, aes(x = price)) +
+  geom_histogram(binwidth = 5, fill = "steelblue", color = "white") +
+  labs(
+    title = "Distribution of Price",
+    x = "Price in USD",
+    y = "Count"
+  )
+
+```

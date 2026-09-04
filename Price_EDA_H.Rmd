@@ -15,7 +15,6 @@ library(pander)
 library(corrplot)
 library(GGally)
 
-
 march_c <- read.csv("games_march2025_cleaned.csv")
 small_steam <- march_c[c("name","price","dlc_count","about_the_game","short_description","windows","mac","linux",
                          "achievements","supported_languages","publishers","categories","genres",
@@ -24,7 +23,7 @@ small_steam <- march_c[c("name","price","dlc_count","about_the_game","short_desc
 numeric_steam <- small_steam[, sapply(small_steam, is.numeric)]
 ```
 
-Correlation matrix for all the variables
+### Correlation matrix for all the variables:
 \
   
 ```{r, echo =FALSE}
@@ -35,17 +34,16 @@ corrplot(
 title("Correlation Matrix for Numeric Variables in Steam dataset", line = 4)
 ```
 
-Taking a look at the price variable
+#### Taking a look at the price variable:
 
 ```{r, echo = FALSE}
 ggplot(small_steam, aes(x = price)) +
-  geom_density(fill = "lightblue") +
+  geom_density(fill = "cyan4") +
   labs(
     title = "Density Plot of Price",
     x = "Price in USD",
     y = "Density"
   )
-
 ```
 \
 

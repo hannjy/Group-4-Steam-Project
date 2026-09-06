@@ -21,6 +21,7 @@ small_steam <- march_c[c("name","price","dlc_count","about_the_game","short_desc
                          "estimated_owners","average_playtime_forever","peak_ccu","num_reviews_total","pct_pos_total")]
 
 numeric_steam <- small_steam[, sapply(small_steam, is.numeric)]
+ncol(small_steam)
 ```
 
 ### Correlation matrix for all the variables:

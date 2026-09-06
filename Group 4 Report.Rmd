@@ -1,0 +1,143 @@
+---
+title: "Exploratory Data Analysis of March 2025 Steam dataset"
+author: "Bry Seeley (id), Hannah Young (300662592), Samuel Halim (id)"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(data.table)
+library(pander)
+library(corrplot)
+library(pander)
+library(corrplot)
+library(GGally)
+
+march_c <- read.csv("games_march2025_cleaned.csv")
+```
+\
+
+We chose to work on the Steam Games Dataset 2025. From this, we selected the games_march2025_cleaned subset to explore and use for our projects.  
+\
+
+The dataset was sourced from Kaggle, where the data was created with Steam store page scraping and Steam Games Scraper repository, which gathers data using the Steam API and Steam Spy. It consists of all the games available on the digital gaming distribution platform steam in March of 2025, and provides extensive information about each individual game. 
+\
+
+&emsp; This was of interest for us because we thought that the game data could help to build informative analysis that tells a story and shows insightful correlations. We are able to conduct both broad and specific analysis which gives us a-lot of material to work with for answering specific questions.
+\
+
+It consists of 89,618 rows, one per Steam application identified by `appid`, and is cross-sectional as each game is observed once at the March 2025 collection date. The variables are mixed: continuous and discrete numerical measures such as `price`, `pct_pos_total` and count variables like `dlc_count` and `peak_ccu`; binary (`windows`, `mac`, `linux`); ordinal bins (`estimated_owners`); nominal fields stored as lists (`publishers`, `genres`, `categories`, `supported_languages`); and unstructured text.
+\
+
+Explicit missingness is minimal, under 1% for every retained variable, the largest being `categories` at 0.9775% empty and `publishers` at 0.6104%. However, missingness is instead encoded through sentinel values which will be addressed during EDA.
+\
+
+We only used the games_march2025_cleaned subset of the Steam Games Dataset 2025, and did not include any of the data from the other subsets. 
+
+---
+
+### Ethics, Privacy and Security
+\
+
+---
+
+### Exploratory Data Analysis
+\
+
+We chose to reduce the dataset down from 47 variables to 19. This was done because, for the group section and our individual projects, some specific variables would have not contributed any additional information or provide deeper insight. 
+\
+
+Our 19 finalized variables are;
+
+```{r, echo = FALSE, results = 'asis'}
+cat("<center>")
+
+variable_vector <-c("name","release_date","price","dlc_count","about_the_game","short_description","windows","mac","linux","achievements","supported_languages","publishers","categories","genres","estimated_owners","average_playtime_forever","peak_ccu","num_reviews_total","pct_pos_total")
+
+description_vector <- c("Game title","Release date", "Price in USD", "Number of DLCs avaliable", "Full description of the game", "Short description of the game", "Windows support","Mac support","Linux support","Count of possible achievements","Supported lanuages","Publisher(s)", "Category tags", "Genre tags","Estimated owners","Average playtime", "Peak concurrent users","Total number of reviews","Percentage of positive reviews"
+)
+
+pander(
+  data.frame(Variables = variable_vector,
+             Description = description_vector),
+  
+  caption = "Reduced selection of Variables from march 2025 Steam dataset"
+)
+
+cat("</center>")
+
+df2 <- march_c %>%
+  select(any_of(variable_vector))
+
+#WORK WITH df2 FOR GRAPHS!!!
+```
+\
+
+#### An interesting feature of this dataset, is that some of the variables are incredibly skewed. For example, lets take a look at Price.
+\
+
+```{r, echo = FALSE,  results = 'asis'}
+cat("<center>")
+
+ggplot(df2, aes(x = price)) +
+  geom_density(fill = "darkslategrey") +
+  labs(
+    title = "Distribution of Price variable",
+    x = "Price in USD",
+    y = "Frequency"
+  )
+
+cat("</center>")
+
+```
+\
+
+Majority of the data sits between 0 and 250 USD, however the plot shows that the variable significant skew to the right and goes up to a maximum value of 1000 USD. This is because there are exactly 8 games that are priced above 500USD, so it greatly increases the scale of the graph.
+
+```{r, echo = FALSE, fig.show="hold", out.width="50%"}
+filtered_price_large <- df2 %>% filter(price > 199.99)
+
+filtered_price_small <- df2 %>% filter(price < 199.99)
+
+ggplot(filtered_price_small, aes(x = price)) +
+  geom_histogram(binwidth = 5, fill = "darkslategrey", color = "white") +
+  labs(
+    title = "Distribution of Price under $199.99",
+    x = "Price in USD",
+    y = "Count"
+  )
+
+ggplot(filtered_price_large, aes(x = price)) +
+  geom_histogram(binwidth = 20, fill = "darkslategrey", color = "white") +
+  labs(
+    title = "Distribution of Price over $199.99",
+    x = "Price in USD",
+    y = "Count"
+  )
+```
+\
+
+```{r, echo = FALSE,  results = 'asis'}
+
+cat("<center>")
+
+filtered_price_large <- arrange(filtered_price_large, price)
+pander(filtered_price_large[,c("name","price")])
+
+cat("</center>")
+```
+\
+
+Because these games are significantly more than the majority of the dataset, it disrupts the distribution and creates the significant skew. 
+---
+
+### Individual Contributions
+
+
+

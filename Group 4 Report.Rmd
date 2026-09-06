@@ -1,6 +1,6 @@
 ---
 title: "Exploratory Data Analysis of March 2025 Steam dataset"
-author: "Bry Seeley (id), Hannah Young (300662592), Samuel Halim (id)"
+author: "Bry Seeley (id), Hannah Young (300662592), Samuel Halim (300656776)"
 date: "`r Sys.Date()`"
 output:
   html_document: default

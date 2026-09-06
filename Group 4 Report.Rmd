@@ -135,7 +135,28 @@ cat("</center>")
 ```
 \
 
+```{r}
+avg_price_year <- df2 %>%
+  mutate(release_date = as.Date(release_date),
+         year = year(release_date)) %>%
+  group_by(year) %>%
+  summarise(avg_price = mean(price, na.rm = TRUE))
 
+ggplot(avg_price_year, aes(x = year, y = avg_price)) +
+  geom_line(colour = "darkred", linewidth = 1.2) +
+  geom_point(colour = "darkred") +
+  labs(
+    title = "Average Price per Release Year from 1997 to 2025",
+    x = "Release Year",
+    y = "Average Price in USD"
+  ) +
+  scale_x_continuous(
+    breaks = seq(min(avg_price_year$year),
+                 max(avg_price_year$year),
+                 by = 2)
+  ) +
+  theme_minimal()
+```
 
 ---
 

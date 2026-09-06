@@ -1,0 +1,177 @@
+---
+title: "Exploratory Data Analysis of March 2025 Steam dataset"
+author: "Bry Seeley (id), Hannah Young (300662592), Samuel Halim (300656776)"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(data.table)
+library(pander)
+library(corrplot)
+library(pander)
+library(corrplot)
+library(GGally)
+library(patchwork)
+
+march_c <- read.csv("games_march2025_cleaned.csv")
+```
+
+We chose to work on the Steam Games Dataset 2025. From this, we selected the games_march2025_cleaned subset to explore and use for our projects.  
+\
+
+The dataset was sourced from Kaggle, where the data was created with Steam store page scraping and Steam Games Scraper repository, which gathers data using the Steam API and Steam Spy. It consists of all the games available on the digital gaming distribution platform steam in March of 2025, and provides extensive information about each individual game. 
+\
+
+&emsp; This was of interest for us because we thought that the game data could help to build informative analysis that tells a story and shows insightful correlations. We are able to conduct both broad and specific analysis which gives us a-lot of material to work with for answering specific questions.
+\
+
+It consists of 89,618 rows, one per Steam application identified by `appid`, and is cross-sectional as each game is observed once at the March 2025 collection date. The variables are mixed: continuous and discrete numerical measures such as `price`, `pct_pos_total` and count variables like `dlc_count` and `peak_ccu`; binary (`windows`, `mac`, `linux`); ordinal bins (`estimated_owners`); nominal fields stored as lists (`publishers`, `genres`, `categories`, `supported_languages`); and unstructured text.
+\
+
+Explicit missingness is minimal, under 1% for every retained variable, the largest being `categories` at 0.9775% empty and `publishers` at 0.6104%. However, missingness is instead encoded through sentinel values which will be addressed during EDA.
+\
+
+We only used the games_march2025_cleaned subset of the Steam Games Dataset 2025, and did not include any of the data from the other subsets. 
+
+---
+
+### Ethics, Privacy and Security
+\
+
+---
+
+### Exploratory Data Analysis
+\
+
+We chose to reduce the dataset down from 47 variables to 19. This was done because, for the group section and our individual projects, some specific variables would have not contributed any additional information or provide deeper insight. 
+\
+
+Our 19 finalized variables are;
+
+```{r, echo = FALSE, results = 'asis'}
+cat("<center>")
+
+variable_vector <-c("name","release_date","price","dlc_count","about_the_game","short_description","windows","mac","linux","achievements","supported_languages","publishers","categories","genres","estimated_owners","average_playtime_forever","peak_ccu","num_reviews_total","pct_pos_total")
+
+description_vector <- c("Game title","Release date", "Price in USD", "Number of DLCs avaliable", "Full description of the game", "Short description of the game", "Windows support","Mac support","Linux support","Count of possible achievements","Supported lanuages","Publisher(s)", "Category tags", "Genre tags","Estimated owners","Average playtime", "Peak concurrent users","Total number of reviews","Percentage of positive reviews"
+)
+
+pander(
+  data.frame(Variables = variable_vector,
+             Description = description_vector),
+  
+  caption = "Reduced selection of Variables from march 2025 Steam dataset"
+)
+
+cat("</center>")
+
+df2 <- march_c %>%
+  select(any_of(variable_vector))
+
+#WORK WITH df2 FOR GRAPHS!!!
+```
+\
+
+#### An interesting feature of this dataset, is that some of the variables are incredibly skewed. For example, lets take a look at Price.
+\
+
+```{r, echo = FALSE,  results = 'asis', fig.cap="Histogram showing the distribution of Price variable. The x axis shows the price of the game in USD, and the y axis shows the count of individual games at its corresponding price level. "}
+cat("<center>")
+
+ggplot(df2, aes(x = price)) +
+  geom_histogram(binwidth = 10, fill = "grey25") +
+  labs(
+    title = "Distribution of Price variable",
+    x = "Price in USD",
+    y = "Frequency" 
+  ) +
+  theme_minimal()
+
+cat("</center>")
+```
+
+\
+
+Majority of the data sits between 0 and 250 USD, however the plot shows that the variable significant skew to the right and goes up to a maximum value of 1000 USD. This is because there are exactly 8 games that are priced above 500USD, so it greatly increases the scale of the graph.
+
+```{r, echo = FALSE, fig.show="hold", out.width="50%", fig.cap= "Histogram showing distribution of games priced under and over $200.00. The x axis shows the price of the game under/over $200.00 USD, and the y axis shows the count of individual games at its corresponding price level"}
+filtered_price_large <- df2 %>% filter(price > 200.00)
+
+filtered_price_small <- df2 %>% filter(price < 200.00)
+
+ggplot(filtered_price_small, aes(x = price)) +
+  geom_histogram(binwidth = 5, fill = "grey25", color = "white") +
+  labs(
+    title = "Distribution of Price under $200.00",
+    x = "Price in USD",
+    y = "Frequency"
+  ) + theme_minimal()
+
+ggplot(filtered_price_large, aes(x = price)) +
+  geom_histogram(binwidth = 20, fill = "grey25", color = "white") +
+  labs(
+    title = "Distribution of Price over $200.00",
+    x = "Price in USD",
+    y = "Frequency"
+  ) + theme_minimal()
+```
+\
+
+```{r, echo = FALSE,  results = 'asis'}
+
+cat("<center>")
+
+filtered_price_large <- arrange(filtered_price_large, price)
+pander(filtered_price_large[,c("name","price","genres")],
+        caption = "Games that cost above $200.00 USD")
+
+cat("</center>")
+```
+\
+
+The games that are over $200.00 have significant jumps in price, such as 500 to 999. When checking on the steam platform, these are all genuine games that are available for purchase, so the high prices are not an error. However, due to these high prices being in the minority compared to the rest of the data set, they could be points of high influence and skew analysis so removing them should be considered when performing further analysis. 
+\
+
+We can visualize the average price of games released per year through 1997 to 2025 through a line graph. It should be noted that because the data set was created in March of 2025, it wont reflect the true average price of games for that year. 
+\
+
+```{r, echo = FALSE, results = 'asis', fig.cap= "Line graph showing the average price of games released per year, from 1997 to 2025. The x axis shows the years spaced by 2, and the y axis shows the average price in USD of the games released that year."}
+
+cat("<center>")
+
+avg_price_year <- df2 %>%
+  mutate(release_date = as.Date(release_date),
+         year = year(release_date)) %>%
+  group_by(year) %>%
+  summarise(avg_price = mean(price, na.rm = TRUE))
+
+ggplot(avg_price_year, aes(x = year, y = avg_price)) +
+  geom_line(colour = "darkred", linewidth = 1.2) +
+  geom_point(colour = "darkred") +
+  labs(
+    title = "Average Price per Release Year from 1997 to 2025",
+    x = "Release Year",
+    y = "Average Price in USD"
+  ) +
+  scale_x_continuous(
+    breaks = seq(min(avg_price_year$year),
+                 max(avg_price_year$year),
+                 by = 2)
+  ) +
+  theme_minimal()
+
+cat("</center>")
+```
+
+This graph shows that average game prices fluctuate significantly across release years, with older years such as 2001 appearing as significantly more expensive than recent years. However, the number of games from 1997 to around 2005 need to be considered when interpreting results. Steam wasn't launched until 2003 so cheaper, low-quality games made before then may not have made it onto the platform. This biases it towards the higher quality, more expensive games which could be why the average increased so significantly. Compared to recent years, there are many more low-priced and free-to-play games available on Steam which may be pulling the average price down.
+\
+
+
+Hannah: I created the group github code repository for us to collaborate on and share our code. I worked on about half of the background and data section, particularly the background of the data and why it was of interest for us to explore and analyse. As a group, we decided on what variables we wanted to shrink our data set down to and I visualized this through a pander table. This followed into a exploration of the price variable, where I visualized the distribution of it - then separated into two price ranges. I pulled out and displayed the expensive variables in another pandas table. Then, I explored the relationship between price and release year and wrote a summary about what the graph displays.

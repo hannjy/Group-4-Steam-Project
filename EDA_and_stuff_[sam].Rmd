@@ -155,3 +155,26 @@ sum(peak_ccu < 1000)/length(peak_ccu)
 ```
 
 97.06% of games have peak concurrent users of less than 1,000.
+
+```{r Release year, fig.cap = "Figure 3: Number of games released on Steam per year, 1997-2025", echo=FALSE, results='asis'}
+df3 <- df2 %>%
+  mutate(
+    release_date = as.Date(release_date, format="%Y-%m-%d"),
+    release_year = as.integer(format(release_date, "%Y"))
+  )
+
+cat("<center>")
+
+df3 %>%
+  count(release_year) %>%
+  ggplot(aes(x = release_year, y = n)) +
+  geom_col() +
+  labs(title = "Number of games released on Steam per year, 1997-2025",
+       x = "Release year", 
+       y = "Number of games") +
+  theme_minimal()
+
+cat("</center>")
+```
+\
+The number of games released on Steam has increased significantly, from 1,525 titles in 2014 to 18,282 in 2024, with 2024 alone representing a 43.6% increase on the previous year. The trend is not entirely monotonic, with a decline of 17.4% in 2019. Notably, 67.6% of all games in the dataset were released from 2020 onwards, meaning the catalogue is heavily weighted towards recent titles. This growth is consistent with the lowering of barriers to publication on the platform and the increasing accessibility of game development tools, although the dataset alone cannot distinguish between such explanations. Note that the 2025 figure is low, as the data were collected in March 2025 and therefore do not capture the full year.

@@ -101,14 +101,14 @@ cat("</center>")
 Majority of the data sits between 0 and 250 USD, however the plot shows that the variable significant skew to the right and goes up to a maximum value of 1000 USD. This is because there are exactly 8 games that are priced above 500USD, so it greatly increases the scale of the graph.
 
 ```{r, echo = FALSE, fig.show="hold", out.width="50%"}
-filtered_price_large <- df2 %>% filter(price > 199.99)
+filtered_price_large <- df2 %>% filter(price > 200.00)
 
-filtered_price_small <- df2 %>% filter(price < 199.99)
+filtered_price_small <- df2 %>% filter(price < 200.00)
 
 ggplot(filtered_price_small, aes(x = price)) +
   geom_histogram(binwidth = 5, fill = "darkslategrey", color = "white") +
   labs(
-    title = "Distribution of Price under $199.99",
+    title = "Distribution of Price under $200.00",
     x = "Price in USD",
     y = "Count"
   ) + theme_minimal()
@@ -116,7 +116,7 @@ ggplot(filtered_price_small, aes(x = price)) +
 ggplot(filtered_price_large, aes(x = price)) +
   geom_histogram(binwidth = 20, fill = "darkslategrey", color = "white") +
   labs(
-    title = "Distribution of Price over $199.99",
+    title = "Distribution of Price over $200.00",
     x = "Price in USD",
     y = "Count"
   ) + theme_minimal()
@@ -129,13 +129,16 @@ cat("<center>")
 
 filtered_price_large <- arrange(filtered_price_large, price)
 pander(filtered_price_large[,c("name","price","genres")],
-        caption = "Games that cost above $199.99 USD")
+        caption = "Games that cost above $200.00 USD")
 
 cat("</center>")
 ```
 \
 
-```{r}
+```{r, echo = FALSE, results = 'asis'}
+cat("<center>")
+
+
 avg_price_year <- df2 %>%
   mutate(release_date = as.Date(release_date),
          year = year(release_date)) %>%
@@ -156,8 +159,10 @@ ggplot(avg_price_year, aes(x = year, y = avg_price)) +
                  by = 2)
   ) +
   theme_minimal()
-```
 
+cat("</center>")
+
+```
 ---
 
 ### Individual Contributions

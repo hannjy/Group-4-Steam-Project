@@ -133,7 +133,56 @@ cat("</center>")
 ```
 \
 
+```{r}
 
+library(patchwork)
+
+steam_data <- steam_data %>%
+  mutate(
+    price_group = ifelse(price == 0, "Free", "Paid")
+  )
+p1 <- ggplot(steam_data,
+       aes(x = price_group,
+           y = pct_pos_total)) +
+  geom_boxplot() +
+  labs(
+    title = "0% pos reviews included",
+    x = "Game Type",
+    y = "Positive Reviews (%)"
+  ) +
+  
+theme_minimal()
+ 
+
+free_paid_data <- steam_data %>%
+  filter(
+    pct_pos_total > 0,
+    price >= 0
+  ) %>%
+  mutate(
+    game_type = ifelse(price == 0, "Free", "Paid")
+  )
+
+p2 <- ggplot(free_paid_data,
+       aes(x = game_type, y = pct_pos_total)) +
+  geom_boxplot(outlier.alpha = 0.4) +
+  labs(
+    title = "0% pos reviews excluded",
+    x = "Game Type",
+    y = "Positive Reviews (%)"
+  ) +
+  
+theme_minimal()
+
+(p1 + p2) + plot_annotation(
+    title = "Percentage of Positive Reviews for Free and Paid Games"
+  )
+```
+\
+
+Percentage positive reviews is representing the percentage of a games total reviews that are positive. Both including and excluding games with 0% of positive reviews is represented here. which is being compared with game type of free vs games you have to pay for. We can see that for the graph including 0%, free games has a higher median of percentage of positive reviews at 75% while paid games is sitting at just above 50%. We can also see that the box plot for free games has a much smaller interquartile range (About 50-87) which showcases the middle 50% of data for free games. Paid games has a much larger interquartile range (About 0-80) showing a much larger variety of positive review percentages. 
+
+Whereas the graph excluding 0% shows that free vs paid games have very similar percentages of positive reviews. Both box plots have smaller interquartile ranges (around 65-87)than the plots that include 0%. Both plots have similar medians a bit over 75 with the paid games median being slightly higher. However, both plots contain lots of outlier points in particular the paid games. Both these graphs show how the paid games variable likely contains lots of outliers or null values which greatly effects the distribution of percentage of positive reviews. Overall if we choose to exclude the possible incorrect values we see that the the percentage of positive reviews is quite similar for free games and paid games.  
 
 ---
 

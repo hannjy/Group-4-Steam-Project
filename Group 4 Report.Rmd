@@ -89,8 +89,9 @@ ggplot(df2, aes(x = price)) +
   labs(
     title = "Distribution of Price variable",
     x = "Price in USD",
-    y = "Frequency"
-  )
+    y = "Frequency" 
+  ) +
+  theme_minimal()
 
 cat("</center>")
 
@@ -110,7 +111,7 @@ ggplot(filtered_price_small, aes(x = price)) +
     title = "Distribution of Price under $199.99",
     x = "Price in USD",
     y = "Count"
-  )
+  ) + theme_minimal()
 
 ggplot(filtered_price_large, aes(x = price)) +
   geom_histogram(binwidth = 20, fill = "darkslategrey", color = "white") +
@@ -118,7 +119,7 @@ ggplot(filtered_price_large, aes(x = price)) +
     title = "Distribution of Price over $199.99",
     x = "Price in USD",
     y = "Count"
-  )
+  ) + theme_minimal()
 ```
 \
 
@@ -127,7 +128,8 @@ ggplot(filtered_price_large, aes(x = price)) +
 cat("<center>")
 
 filtered_price_large <- arrange(filtered_price_large, price)
-pander(filtered_price_large[,c("name","price", "short_description")])
+pander(filtered_price_large[,c("name","price","genres")],
+        caption = "Games that cost above $199.99 USD")
 
 cat("</center>")
 ```

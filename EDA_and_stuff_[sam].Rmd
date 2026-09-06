@@ -60,6 +60,7 @@ missing_df <- data.frame(
 
 pander(missing_df)
 ```
+
 The table above shows the percentage of variables that are missing. This is most likely due to the way data is collected. They seemed to have used sentinel figures as opposed to NA, e.g. negative or zero values.
 
 ```{r N languages & N platforms, message=FALSE, echo=FALSE}
@@ -95,13 +96,14 @@ ggplot(platform_by_year, aes(x = release_year, y = pct,
                               color = platform, linetype = platform)) +
   geom_line(linewidth = 1) +
   labs(title = "platform availability by release year",
-       x = "release_year", y = "% of games released that year",
+       x = "release_year", y = "pct of games released that year",
        color = "platform", linetype = "platform") +
   theme_minimal()
 ```
-The above graph shows the percentage of games' supported platforms released each year. The period prior to 2005 was excluded due to small amount of data that skews the percentage. We can see that almost all games are always available on windows, while linux and mac support have been slowly declining after its peak in 2013.
 
-```{r Est owners, echo=FALSE}
+The graph above shows the percentage of games' supported platforms released each year. The period prior to 2005 was excluded due to small amount of data that skews the percentage. We can see that almost all games are always available on windows, while linux and mac support have been slowly declining after its peak in 2013.
+
+```{r Est owners, echo=FALSE, message=FALSE, warning=FALSE}
 owner_levels <- c(
   "0 - 0", "0 - 20000", "20000 - 50000", "50000 - 100000",
   "100000 - 200000", "200000 - 500000", "500000 - 1000000",
@@ -111,19 +113,20 @@ owner_levels <- c(
 )
 
 df3 <- df2 %>%
-  count(estimated_owners, name = "Freq") %>%
+  count(estimated_owners, name = "Frequency") %>%
   mutate(estimated_owners = factor(estimated_owners,
                        levels = owner_levels,
                        ordered = TRUE)) %>%
   arrange(estimated_owners)
 
-df3
+pander(df3)
 
-ggplot(df3, aes(x=estimated_owners, y=Freq))+
+ggplot(df3, aes(x=estimated_owners, y=Frequency))+
   geom_col() +
-  labs(title = "distribution of estimated owners",
-       x = "estimated_owners") +
-  theme_minimal() +
+  labs(title = "Distribution of Estimated Owners",
+       x = "estimated_owners",
+       y = "Frequency") +
+  geom_density(fill = "darkslategrey") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 

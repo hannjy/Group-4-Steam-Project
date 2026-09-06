@@ -1,6 +1,6 @@
 ---
 title: "Exploratory Data Analysis of March 2025 Steam dataset"
-author: "Bry Seeley (id), Hannah Young (300662592), Samuel Halim (id)"
+author: "Bry Seeley (id), Hannah Young (300662592), Samuel Halim (300656776)"
 date: "`r Sys.Date()`"
 output:
   html_document: default
@@ -21,7 +21,6 @@ library(GGally)
 
 march_c <- read.csv("games_march2025_cleaned.csv")
 ```
-\
 
 We chose to work on the Steam Games Dataset 2025. From this, we selected the games_march2025_cleaned subset to explore and use for our projects.  
 \
@@ -128,16 +127,17 @@ ggplot(filtered_price_large, aes(x = price)) +
 cat("<center>")
 
 filtered_price_large <- arrange(filtered_price_large, price)
-pander(filtered_price_large[,c("name","price")])
+pander(filtered_price_large[,c("name","price", "short_description")])
 
 cat("</center>")
 ```
 \
 
-Because these games are significantly more than the majority of the dataset, it disrupts the distribution and creates the significant skew. 
+
+
 ---
 
 ### Individual Contributions
 
-
+Hannah: created group github, half of the background and data, 
 

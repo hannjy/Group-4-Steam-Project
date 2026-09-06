@@ -21,25 +21,25 @@ df2 <- df %>%
   select(any_of(keep_col))
 ```
 
-```{r Release year, echo=FALSE}
-df2 <- df2 %>%
+```{r Release year, fig.cap = "Figure 3: Number of games released on Steam per year, 1997-2025", echo=FALSE}
+df3 <- df2 %>%
   mutate(
     release_date = as.Date(release_date, format="%Y-%m-%d"),
     release_year = as.integer(format(release_date, "%Y"))
   )
 
-df2 %>%
+df3 %>%
   count(release_year) %>%
   ggplot(aes(x = release_year, y = n)) +
   geom_col() +
-  labs(title = "Steam releases per year",
+  labs(title = "Number of games released on Steam per year, 1997-2025",
        x = "Release year", y = "Number of games") +
   theme_minimal()
 ```
 
 The number of games released on Steam has followed an increasing trend, which is aligned with the migration away from console gaming towards PC. Note that the data for 2025 is low because it was collected in March 2025 and therefore do not capture the full year.
 
-```{r Pct missing, message=FALSE, echo=FALSE}
+```{r Pct missing, fig.cap = "Table 2: Percentage of variables missing", message=FALSE, echo=FALSE}
 missing_df <- data.frame(
   variable = c("supported_languages: []", "publishers: []", "categories: []", "genres: []",
                "estimated_owners: 0 - 0", "average_playtime_forever: 0", "peak_ccu: 0",
@@ -61,17 +61,17 @@ missing_df <- data.frame(
 pander(missing_df)
 ```
 
-The table above shows the percentage of variables that are missing. This is most likely due to the way data is collected. They seemed to have used sentinel figures as opposed to NA, e.g. negative or zero values.
+The proportion of data missing as per the above table is most likely due to the way data is collected. They seemed to have used sentinel figures as opposed to NA, e.g. negative or zero values.
 
 ```{r N languages & N platforms, message=FALSE, echo=FALSE}
-df2 <- df2 %>%
+df3 <- df3 %>%
   mutate(
     languages_clean = gsub("\\[|\\]|'", "", supported_languages),
     languages_list  = strsplit(languages_clean, ",\\s*"),
     n_languages     = lengths(languages_list)
   )
 
-df2 <- df2 %>%
+df3 <- df3 %>%
   mutate(
     windows = as.logical(windows),
     mac = as.logical(mac),
@@ -80,8 +80,8 @@ df2 <- df2 %>%
   )
 ```
 
-```{r Platform availability, message=FALSE, echo=FALSE}
-platform_by_year <- df2 %>%
+```{r Platform availability, fig.cap = "Figure 4: Graph of platform availability by release year, 2005-2025", message=FALSE, echo=FALSE}
+platform_by_year <- df3 %>%
   filter(release_year >= 2005) %>%
   group_by(release_year) %>%
   summarise(
@@ -95,15 +95,15 @@ platform_by_year <- df2 %>%
 ggplot(platform_by_year, aes(x = release_year, y = pct,
                               color = platform, linetype = platform)) +
   geom_line(linewidth = 1) +
-  labs(title = "platform availability by release year",
-       x = "release_year", y = "pct of games released that year",
-       color = "platform", linetype = "platform") +
+  labs(title = "Graph of platform availability by release year, 2005-2025",
+       x = "Release year", y = "Percentage of games released",
+       color = "Platform", linetype = "Platform") +
   theme_minimal()
 ```
 
 The graph above shows the percentage of games' supported platforms released each year. The period prior to 2005 was excluded due to small amount of data that skews the percentage. We can see that almost all games are always available on windows, while linux and mac support have been slowly declining after its peak in 2013.
 
-```{r Est owners, echo=FALSE, message=FALSE, warning=FALSE}
+```{r Est owners, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "Figure 5: Distribution of estimated owners"}
 owner_levels <- c(
   "0 - 0", "0 - 20000", "20000 - 50000", "50000 - 100000",
   "100000 - 200000", "200000 - 500000", "500000 - 1000000",
@@ -119,40 +119,39 @@ df3 <- df2 %>%
                        ordered = TRUE)) %>%
   arrange(estimated_owners)
 
-pander(df3)
-
 ggplot(df3, aes(x=estimated_owners, y=Frequency))+
   geom_col() +
-  labs(title = "Distribution of Estimated Owners",
-       x = "estimated_owners",
+  labs(title = "Distribution of estimated owners",
+       x = "Estimated owners",
        y = "Frequency") +
+  theme_minimal() +
   geom_density(fill = "darkslategrey") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, fig.cap = "Table 3: Table of two games with highest estimated owners"}
 name_estimated_owners <- c("name","estimated_owners")
 
-#df2[df2$estimated_owners=="100000000 - 200000000", name_estimated_owners]
-#df2[df2$estimated_owners=="200000000 - 500000000", name_estimated_owners]
-
 df_estimated_owners <- data.frame(
-  name = c(df2[df2$estimated_owners=="100000000 - 200000000", "name"],
-            df2[df2$estimated_owners=="200000000 - 500000000", "name"]
-            ),
   estimated_owners = c(df2[df2$estimated_owners=="100000000 - 200000000", "estimated_owners"],
                        df2[df2$estimated_owners=="200000000 - 500000000", "estimated_owners"]
-                       )
+                       ),
+  name = c(df2[df2$estimated_owners=="100000000 - 200000000", "name"],
+            df2[df2$estimated_owners=="200000000 - 500000000", "name"]
+            )
 )
 
 pander(df_estimated_owners)
+
+df3[df3$estimated_owners=="0 - 20000","Frequency"]/sum(df3$Frequency)
 ```
 
-From the above plot and table, we can see that the estimated_owners distribution is extremely skewed to the right, with only two games holding the highest two values. Games on average are owned by 0-20,000 people.
+From the above plot and table, we can see that the estimated_owners distribution is extremely skewed to the right, with only two games holding the highest two values. Approximately 66.19% of games have estimated owners of 0 - 20000.
 
-proportion of peak_ccu < 1,000
+# proportion of peak_ccu < 1,000
 ```{r peak ccu, echo=FALSE}
 peak_ccu <- df2$peak_ccu[df2$peak_ccu>0]
 sum(peak_ccu < 1000)/length(peak_ccu)
 ```
 
+97.06% of games have peak concurrent users of less than 1,000.
